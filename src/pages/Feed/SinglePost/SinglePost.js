@@ -14,7 +14,8 @@ class SinglePost extends Component {
 
   componentDidMount() {
     const postId = this.props.match.params.postId;
-    fetch('http://writing-room.herokuapp.com/feed/post/' + postId, {
+    fetch('https://writing-room.herokuapp.com/feed/post/' + postId, {
+    // fetch('http://localhost:8080/feed/post/' + postId, {
       headers: {
         Authorization: 'Bearer ' + this.props.token
       }
@@ -25,14 +26,19 @@ class SinglePost extends Component {
         }
         return res.json();
       })
-      .then(resData => {
+      .then(resData => 
+        {
+          console.log(resData.post);
         this.setState({
           title: resData.post.title,
-          author: resData.post.creator.name,
-          image: 'http://writing-room.herokuapp.com/' + resData.post.imageUrl,
+          author: resData.author,
+          // image: 'https://writing-room.herokuapp.com/' + resData.post.imageUrl,
+          image: resData.post.imageUrl,
           date: new Date(resData.post.createdAt).toLocaleDateString('en-US'),
           content: resData.post.content
         });
+        console.log(this.state.author);
+        console.log(this.state.date);
       })
       .catch(err => {
         console.log(err);
